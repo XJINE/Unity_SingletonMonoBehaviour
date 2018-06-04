@@ -1,0 +1,2 @@
+# Unity_SingletonMonoBehaviour
+General SingletonMonoBehaviour.
