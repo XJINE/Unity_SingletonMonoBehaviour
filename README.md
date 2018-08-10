@@ -4,15 +4,12 @@ General SingletonMonoBehaviour.
 
 ## How to Use
 
-### Import to Your Project
+## Import to Your Project
 
-If you want to import this repository as submodule in your project.
+You can import this assets from UnityPackage.
 
-```
-git submodule add -b submodule https://github.com/XJINE/Unity_SingletonMonoBehaviour.git Assets/Packages/SingletonMonoBehaviour
-```
+- [SingletonMonoBehaviour.unitypackage](https://github.com/XJINE/Unity_SingletonMonoBehaviour/blob/master/SingletonMonoBehaviour.unitypackage)
 
 ### Benefits
 
-This SingletonMonoBehaviour use bool type value ``instanciated``.
-It makes checking a instance existence more fast.
+This SingletonMonoBehaviour use bool type value ``instanciated`` when check the instance existence.
