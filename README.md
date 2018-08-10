@@ -8,6 +8,32 @@ You can import this assets from UnityPackage.
 
 - [SingletonMonoBehaviour.unitypackage](https://github.com/XJINE/Unity_SingletonMonoBehaviour/blob/master/SingletonMonoBehaviour.unitypackage)
 
-### Benefits
+## Merit
 
 This SingletonMonoBehaviour use bool type value ``instanciated`` when check the instance existence.
+It works more faster than using null.
+
+```
+private static T instance;
+private static bool instanciated;
+
+public static T Instance
+{
+    get
+    {
+        if (SingletonMonoBehaviour<T>.instanciated)
+        {
+            return instance;
+        }
+
+        if (SingletonMonoBehaviour<T>.instance == null)
+        {
+            ~
+        }
+
+        SingletonMonoBehaviour<T>.instanciated = true;
+
+        return instance;
+    }
+}
+```
