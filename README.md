@@ -2,8 +2,6 @@
 
 General SingletonMonoBehaviour.
 
-## How to Use
-
 ## Import to Your Project
 
 You can import this assets from UnityPackage.
