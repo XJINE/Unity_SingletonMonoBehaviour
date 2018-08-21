@@ -4,7 +4,7 @@ General SingletonMonoBehaviour.
 
 ## Import to Your Project
 
-You can import this assets from UnityPackage.
+You can import this asset from UnityPackage.
 
 - [SingletonMonoBehaviour.unitypackage](https://github.com/XJINE/Unity_SingletonMonoBehaviour/blob/master/SingletonMonoBehaviour.unitypackage)
 
