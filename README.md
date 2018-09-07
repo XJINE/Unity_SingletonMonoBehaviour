@@ -2,13 +2,13 @@
 
 General SingletonMonoBehaviour.
 
-## How to Use
-
-### Import to Your Project
+## Import to Your Project
 
 You can import this asset from UnityPackage.
 
 - [SingletonMonoBehaviour.unitypackage](https://github.com/XJINE/Unity_SingletonMonoBehaviour/blob/master/SingletonMonoBehaviour.unitypackage)
+
+## How to Use
 
 ### In Your Code
 
