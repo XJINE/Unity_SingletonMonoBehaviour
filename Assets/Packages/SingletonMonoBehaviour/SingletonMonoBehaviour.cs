@@ -2,15 +2,9 @@
 
 public class SingletonMonoBehaviour<T> : MonoBehaviour where T : SingletonMonoBehaviour<T>
 {
-    // NOTE:
-    // There is a way to implemnt without SingletonMonoBehaviour<T>.instanciated.
-    // However, checking bool is faster than checking null.
-
     #region Field
 
-    private static T instance;
-
-    private static bool instanciated;
+    private static T _instance;
 
     #endregion Field
 
@@ -20,32 +14,29 @@ public class SingletonMonoBehaviour<T> : MonoBehaviour where T : SingletonMonoBe
     {
         get
         {
-            if (SingletonMonoBehaviour<T>.instanciated)
+            if (Instantiated)
             {
-                return instance;
+                return _instance;
             }
 
-            if (SingletonMonoBehaviour<T>.instance == null)
+            if (_instance == null)
             {
-                SingletonMonoBehaviour<T>.instance = (T)FindObjectOfType(typeof(T));
+                _instance = (T)FindObjectOfType(typeof(T));
 
-                if (SingletonMonoBehaviour<T>.instance == null)
+                if (_instance == null)
                 {
-                    GameObject gameObject = new GameObject(typeof(T).ToString());
-                    SingletonMonoBehaviour<T>.instance = gameObject.AddComponent<T>();
+                    var gameObject = new GameObject(typeof(T).ToString());
+                    _instance = gameObject.AddComponent<T>();
                 }
             }
 
-            SingletonMonoBehaviour<T>.instanciated = true;
+            Instantiated = true;
 
-            return instance;
+            return _instance;
         }
     }
 
-    public static bool Instanciated
-    {
-        get { return SingletonMonoBehaviour<T>.instanciated; }
-    }
+    public static bool Instantiated { get; private set; }
 
     #endregion Property
 
@@ -53,31 +44,23 @@ public class SingletonMonoBehaviour<T> : MonoBehaviour where T : SingletonMonoBe
 
     protected virtual void Awake()
     {
-        // NOTE:
-        // Make instance in Awake to make reference performance uniformly.
-
-        if (SingletonMonoBehaviour<T>.instance == null)
+        if (_instance == null)
         {
-            SingletonMonoBehaviour<T>.instance = (T)this;
-            SingletonMonoBehaviour<T>.instanciated = true;
+            _instance    = (T)this;
+            Instantiated = true;
         }
 
-        // NOTE:
-        // If there is an instance already in the same scene, destroy this script.
-        // But keep a GameObject(parent) instance is important
-        // because some another scripts may attached to it.
-
-        else if (SingletonMonoBehaviour<T>.instance != this)
+        else if (_instance != this)
         {
             Debug.LogWarning("Singleton " + typeof(T) + " is already exists.");
-            GameObject.Destroy(this);
+            Destroy(this);
         }
     }
 
     protected virtual void OnDestroy()
     {
-        SingletonMonoBehaviour<T>.instance = null;
-        SingletonMonoBehaviour<T>.instanciated = false;
+        _instance    = null;
+        Instantiated = false;
     }
 
     #endregion Method
