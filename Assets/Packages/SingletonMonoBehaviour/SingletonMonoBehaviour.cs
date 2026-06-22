@@ -32,7 +32,7 @@ public class SingletonMonoBehaviour<T> : MonoBehaviour where T : SingletonMonoBe
                 return _instance;
             }
 
-            _instance = (T)FindObjectOfType(typeof(T));
+            _instance = (T)FindAnyObjectByType(typeof(T));
 
             if (_instance != null)
             {
