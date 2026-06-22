@@ -1,67 +1,82 @@
 ﻿using UnityEngine;
 
+// NOTE:
+// Prevents instantiation when the application quits.
+// Separated from the generic class because [RuntimeInitializeOnLoadMethod] cannot be used inside generic classes.
+// Reset on play start so the flag does not survive when Domain Reload is disabled in Enter Play Mode Settings.
+internal static class SingletonMonoBehaviourQuit
+{
+    internal static bool Quitting;
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void Reset()
+    {
+        Quitting = false;
+    }
+}
+
 public class SingletonMonoBehaviour<T> : MonoBehaviour where T : SingletonMonoBehaviour<T>
 {
-    #region Field
-
     private static T _instance;
-
-    #endregion Field
-
-    #region Property
-
     public static T Instance
     {
         get
         {
+            if (SingletonMonoBehaviourQuit.Quitting)
+            {
+                return null;
+            }
+
             if (Instantiated)
             {
                 return _instance;
             }
 
-            if (_instance == null)
-            {
-                _instance = (T)FindObjectOfType(typeof(T));
+            _instance = (T)FindObjectOfType(typeof(T));
 
-                if (_instance == null)
-                {
-                    var gameObject = new GameObject(typeof(T).ToString());
-                    _instance = gameObject.AddComponent<T>();
-                }
+            if (_instance != null)
+            {
+                return _instance;
             }
 
-            Instantiated = true;
+            var gameObject = new GameObject(typeof(T).ToString());
+
+            _instance = gameObject.AddComponent<T>();
 
             return _instance;
         }
     }
 
-    public static bool Instantiated { get; private set; }
-
-    #endregion Property
-
-    #region Method
+    // NOTE:
+    // Used to check if the instance already exists without instantiating it.
+    public static bool Instantiated => _instance != null;
 
     protected virtual void Awake()
     {
         if (_instance == null)
         {
-            _instance    = (T)this;
-            Instantiated = true;
+            _instance = (T)this;
         }
 
         else if (_instance != this)
         {
-            Debug.LogWarning("Singleton " + typeof(T) + " is already exists.");
+            Debug.LogWarning($"Singleton {typeof(T)} is already exists.");
             Destroy(this);
         }
     }
 
-    protected virtual void OnDestroy()
+    protected virtual void OnApplicationQuit()
     {
-        _instance    = null;
-        Instantiated = false;
+        SingletonMonoBehaviourQuit.Quitting = true;
     }
 
-    #endregion Method
+    protected virtual void OnDestroy()
+    {
+        if (_instance != this)
+        {
+            return;
+        }
+
+        _instance = null;
+    }
 }
